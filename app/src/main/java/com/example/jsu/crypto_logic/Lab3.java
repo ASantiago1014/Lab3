@@ -16,6 +16,20 @@ public class Lab3 extends AppCompatActivity {
 
     private int incorrectGuesses;
 
+    private ArrayList secretWords;
+
+    private String secretWord;
+
+    private ArrayList<String> splitWord;
+
+    private int index;
+
+    private ArrayList<String> wordSplitBeforeShuffle;
+
+    private String shuffledWord;
+
+    private int secretWordLength;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +49,30 @@ public class Lab3 extends AppCompatActivity {
 
         TextView w = (TextView) findViewById(R.id.welcomeMessage);
 
-        w.setText("Welcome to Crypto-Logic! Try to guess the secret word, one letter at a time!");
+        w.setText("Try to guess the secret word, one letter at a time!");
 
-        ArrayList secretWords = new ArrayList(Arrays.asList("APPLE", "BANANA", "CHERRY"));
+        secretWords = new ArrayList(Arrays.asList("APPLE", "BANANA", "CHERRY"));
 
         int randomInt = (int)(Math.random() * 3 + 1);
 
-        String secretWord = String.valueOf(secretWords.get(randomInt));
+        secretWord = String.valueOf(secretWords.get(randomInt));
 
-        String shuffledWord = shuffleSecretWord(secretWord);
+        secretWordLength = secretWord.length();
+
+        shuffledWord = "";
+
+        splitWord = new ArrayList(Arrays.asList(secretWord.split("")));
+
+        wordSplitBeforeShuffle = new ArrayList(Arrays.asList(secretWord.split("")));
+
+        Collections.shuffle(splitWord);
+
+        for (String c : splitWord)
+            shuffledWord += c;
 
         setShuffledWordText(shuffledWord);
+
+
     }
 
 
@@ -59,25 +86,54 @@ public class Lab3 extends AppCompatActivity {
         return true;
     }
 
-    public String shuffleSecretWord(String s) {
-
-        String shuffledWord = "";
-
-        ArrayList<String> splitWord = new ArrayList(Arrays.asList(s.split("")));
-
-        Collections.shuffle(splitWord);
-
-        for (String c : splitWord)
-            shuffledWord += c;
-
-        return shuffledWord;
-    }
 
     public void setShuffledWordText(String s) {
 
         TextView sw = (TextView) findViewById(R.id.scrambledWord);
 
         sw.setText(s);
+    }
+
+    public void enterButtonClicked(View v) {
+
+        TextView gl = findViewById(R.id.guessLetter);
+
+        TextView uw = findViewById(R.id.unscrambledWord);
+
+        TextView gc = findViewById(R.id.incorrectGuessCounter);
+
+        String guess = gl.getText().toString();
+
+            if (guess.length() > 1) {
+
+                gl.setText("");
+
+            }
+
+            else {
+
+                if (guess.equalsIgnoreCase(wordSplitBeforeShuffle.get(index))) {
+
+                    String partialWord = uw.getText().toString();
+
+                    uw.setText((partialWord + guess).toUpperCase());
+
+                    gl.setText("");
+
+                    index++;
+
+                }
+
+                else {
+
+                    gl.setText("");
+
+                    incorrectGuesses++;
+                }
+
+            }
+
+
     }
 
 
