@@ -28,8 +28,6 @@ public class Lab3 extends AppCompatActivity {
 
     private String shuffledWord;
 
-    private int secretWordLength;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +54,6 @@ public class Lab3 extends AppCompatActivity {
         int randomInt = (int)(Math.random() * 3 + 1);
 
         secretWord = String.valueOf(secretWords.get(randomInt));
-
-        secretWordLength = secretWord.length();
 
         shuffledWord = "";
 
@@ -104,34 +100,38 @@ public class Lab3 extends AppCompatActivity {
 
         String guess = gl.getText().toString();
 
-            if (guess.length() > 1) {
+        if (guess.length() > 1) {
+
+            gl.setText("");
+
+        }
+
+        else {
+
+            if (guess.equalsIgnoreCase(wordSplitBeforeShuffle.get(index))) {
+
+                String partialWord = uw.getText().toString();
+
+                uw.setText((partialWord + guess).toUpperCase());
 
                 gl.setText("");
+
+                index++;
 
             }
 
             else {
 
-                if (guess.equalsIgnoreCase(wordSplitBeforeShuffle.get(index))) {
+                gl.setText("");
 
-                    String partialWord = uw.getText().toString();
-
-                    uw.setText((partialWord + guess).toUpperCase());
-
-                    gl.setText("");
-
-                    index++;
-
-                }
-
-                else {
-
-                    gl.setText("");
-
-                    incorrectGuesses++;
-                }
-
+                incorrectGuesses++;
             }
+
+        }
+
+        if (index == splitWord.size())
+            gc.setText("You had " + incorrectGuesses + " incorrect guesses!");
+
 
 
     }
